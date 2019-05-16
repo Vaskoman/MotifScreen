@@ -1,6 +1,37 @@
+# Define holder variable for sequence to be read from file:
+seq = ""
+
+# Open file containing sequence:
+sequence = open ("testSeq.txt", "r") # read the file
+# Read sequence line-by-line and append if not FASTA title:
+for line in sequence:
+    if '>' in line:
+        print(sequence.readline()+"\n\n")
+    else:
+        print(sequence.readline()+"\n\n")
+        '''
+        a = sequence.readline()
+        print(a)
+        seq = seq + a.rstrip("\n\r") # removes all trailing spaces and \n's
+        '''
+
+sequence.close()
+print(seq)
+'''
+for i in seqList:
+    if '>' in i:
+        continue
+    elif '\n' in i:
+        seq = seq + i
+'''
+
+
+
+
 from Bio import motifs
 
 ## Reading from JASPAR "Binding sites information" ####
+'''
 arnt = motifs.read(open("Arnt.sites"), "sites")
 print(arnt.instances[:3])
 for instance in arnt.instances:
@@ -32,12 +63,12 @@ print("%4.2f" % pssm.min)
 
 mean = pssm.mean(background)
 std = pssm.std(background)
-print("mean = %0.2f, standard deviation = %0.2f" %(mean, std))
+print("mean = %0.2f, standard deviation = %0.2f" %(mean, std))'''
 ''' The mean is equal to relative entropy and is a measure for the
 information content of the motif compared to background '''
 
 ## Search for a motif in a sequence ####
-from Bio.Seq import Seq
+'''from Bio.Seq import Seq
 test_seq=Seq("TACACTGCATTACAACCCAAGCATTA", m.alphabet)
 print(len(test_seq))
 # Searching for exact matches:
@@ -60,7 +91,7 @@ for pos, seq in r.instances.search(test_seq):
 # Searching for matches using PSSM score:
 for position, score in pssm.search(test_seq, threshold=1.0):
     print(test_seq)
-    print("Position %d: score = %5.3f" %(position,score))
+    print("Position %d: score = %5.3f" %(position,score))'''
 
 '''The negative positions refer to instances of the motif found on
 the reverse strand of the test sequence, and follow the Python
@@ -74,11 +105,11 @@ The default threshold is 0.0, which selects everything that looks more
 like the motif than the background.'''
 
 # Calculate the scores at all positions along the sequence:
-print(pssm.calculate(test_seq)) # FORWARD STRAND only
+'''print(pssm.calculate(test_seq)) # FORWARD STRAND only
 # Same for reverse strand:
 rpssm = pssm.reverse_complement()
 print(rpssm.calculate(test_seq)) # for reverse strand now
-
+'''
 # This program screens for VDREs
 # It requests and input sequence from user
 # Returns the location of the VDRE within sequence
