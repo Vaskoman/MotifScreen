@@ -31,15 +31,16 @@ pssm = pwm.log_odds(pcounts)
 
 ## Search for instances usine PSSMs ####
 from Bio.Seq import Seq
+import operator
 test_seq = Seq(seq, m.alphabet)
 # Forward:
-print("MOTIF ALIGNMENT:\nNegative positions denote reverse strand:\n
-")
+print("MOTIF ALIGNMENT:\nNegative positions denote reverse strand:\n")
 for position, score in pssm.search(test_seq, threshold=1.0):
     print("Position %d: score = %5.3f \n Sequence = %s" %(position,score,
     test_seq[position:position+len(pssm.consensus)]))
 results = [(position, score, test_seq[position:position+len(pssm.consensus)])
-for position, score in pssm.search(test_seq, threshold=1.0)]
+for position,score in pssm.search(test_seq, threshold=1.0)]
+results.sort(key = operator.itemgetter(1),reverse=True) # sort the list based on Score
 # Reverse:
 rpssm = pssm.reverse_complement() # generate reverse complement of motif
 print("\n\nREVERSE COMPLEMENT:\n")
@@ -48,6 +49,7 @@ for position, score in rpssm.search(test_seq, threshold=1.0):
     test_seq[position:position+len(rpssm.consensus)]))
 resultsRC = [(position, score, test_seq[position:position+len(rpssm.consensus)])
 for position, score in rpssm.search(test_seq, threshold=1.0)]
+resultsRC.sort(key= operator.itemgetter(1),reverse=True) # sort the list based on Score
 
 ## Create tables and save as csv files ####
 import csv # import module
