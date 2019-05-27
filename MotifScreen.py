@@ -1,9 +1,10 @@
 
 ## Read sequence file to be examined for motifs ####
+file_path = input ("Enter absolute path to the file containing the sequence to be tested:\n")
 # Define holder variable for sequence to be read from file:
 seq = ""
 # Open file containing sequence:
-sequence = open ("testSeq.txt", "r") # read the file
+sequence = open (file_path, "r") # read the file
 # Read sequence line-by-line and append if not FASTA title:
 for line in sequence:
     li = line.strip() # remove trailing spaces and new lines
@@ -13,9 +14,10 @@ sequence.close()
 seq = seq.upper()
 
 ## Create PSSM from a JASPAR file for motif ####
+motif = input ("Enter absolute path to the file containing the jaspar TF motif:\n")
 from Bio import motifs
 # Open file and read:
-with open("VDR.jaspar") as handle:
+with open(motif) as handle:
     m = motifs.read(handle, "jaspar")
 # Get relative proportion of nucleotides from test sequence:
 A = seq.count("A")/len(seq) # proportion of A
@@ -52,21 +54,24 @@ for position, score in rpssm.search(test_seq, threshold=1.0)]
 resultsRC.sort(key= operator.itemgetter(1),reverse=True) # sort the list based on Score
 
 ## Create tables and save as csv files ####
+csvtable = input ("Enter absolute path and filename of table followed by '.csv':\n")
 import csv # import module
 # Forward
-with open('results.csv', "w") as out:
+with open(csvtable, "w") as out:
     csv_out = csv.writer(out)
     csv_out.writerow(['StartPosition','Score','Sequence'])
     #for x in results:
     #    csv_out.writerow(x)
     csv_out.writerows(results)
 # Reverse
+'''
 with open('resultsRC.csv', "w") as out:
     csv_out = csv.writer(out)
     csv_out.writerow(['StartPosition','Score','Sequence'])
     #for x in results:
     #    csv_out.writerow(x)
     csv_out.writerows(resultsRC)
+'''
 
 '''
 The negative positions refer to instances of the motif found on
