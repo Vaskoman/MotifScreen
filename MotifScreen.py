@@ -32,26 +32,19 @@ pwm = m.counts.normalize(pseudocounts=
 pssm = pwm.log_odds(pcounts)
 
 ## Search for instances usine PSSMs ####
+thresh = int(input("Enter score threshold:\n")) # Ask for alignment score
 from Bio.Seq import Seq
 import operator
 test_seq = Seq(seq, m.alphabet)
 # Forward:
 print("MOTIF ALIGNMENT:\nNegative positions denote reverse strand:\n")
-for position, score in pssm.search(test_seq, threshold=1.0):
+for position, score in pssm.search(test_seq, threshold=thresh):
     print("Position %d: score = %5.3f \n Sequence = %s" %(position,score,
     test_seq[position:position+len(pssm.consensus)]))
 results = [(position, score, test_seq[position:position+len(pssm.consensus)])
 for position,score in pssm.search(test_seq, threshold=1.0)]
 results.sort(key = operator.itemgetter(1),reverse=True) # sort the list based on Score
-# Reverse:
-rpssm = pssm.reverse_complement() # generate reverse complement of motif
-print("\n\nREVERSE COMPLEMENT:\n")
-for position, score in rpssm.search(test_seq, threshold=1.0):
-    print("Position %d: score = %5.3f \n Sequence = %s" %(position,score,
-    test_seq[position:position+len(rpssm.consensus)]))
-resultsRC = [(position, score, test_seq[position:position+len(rpssm.consensus)])
-for position, score in rpssm.search(test_seq, threshold=1.0)]
-resultsRC.sort(key= operator.itemgetter(1),reverse=True) # sort the list based on Score
+
 
 ## Create tables and save as csv files ####
 csvtable = input ("Enter absolute path and filename of table followed by '.csv':\n")
@@ -63,15 +56,7 @@ with open(csvtable, "w") as out:
     #for x in results:
     #    csv_out.writerow(x)
     csv_out.writerows(results)
-# Reverse
-'''
-with open('resultsRC.csv', "w") as out:
-    csv_out = csv.writer(out)
-    csv_out.writerow(['StartPosition','Score','Sequence'])
-    #for x in results:
-    #    csv_out.writerow(x)
-    csv_out.writerows(resultsRC)
-'''
+
 
 '''
 The negative positions refer to instances of the motif found on
